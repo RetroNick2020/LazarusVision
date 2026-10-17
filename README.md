@@ -1,4 +1,4 @@
-Lazarus Vision was created by accident. Vibe coding with Claude I simply asked him to create simple TUI modeled after Lazarus LCL. 
+LazarusVision was created by accident. Vibe coding with Claude I simply asked him to create simple TUI modeled after Lazarus LCL. 
 Claude knocked this one out of the park. Proceeded to create most of the controls in one shot. When done I asked if we could create a 
 freepascal code editor for DOS and Claude delivered! And yes it's better than FreeVision! I spent way too much time trying to figure this ancient piece of junk, LazarusVision is much simpler. Docs Included!
 
@@ -8,9 +8,9 @@ accomplish on my own! Plus who writes software for DOS these days. This can no d
 if you don't see any files yet just be patient, they will be here soon. Just really tired and I can only do small portions at a time!
 
 
-# FPTUI User Guide
+# LazarusVision User Guide
 
-FPTUI is a text-mode user interface for Free Pascal on 32-bit DOS (go32v2).
+LazarusVision is a text-mode user interface for Free Pascal on 32-bit DOS (go32v2).
 Forms and controls follow Lazarus (and FPTEGL's DUI): you make a `TForm`
 descendant, put `TButton`s, `TEdit`s and friends on it, hook up `OnClick`
 and friends, and call `Application.Run`. Everything is drawn with text
