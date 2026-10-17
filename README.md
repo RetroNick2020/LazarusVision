@@ -2,7 +2,7 @@ LazarusVision was created by accident. Vibe coding with Claude I simply asked hi
 Claude knocked this one out of the park. Proceeded to create most of the controls in one shot. When done I asked if we could create a 
 freepascal code editor for DOS and Claude delivered! And yes it's better than FreeVision! 
 
-Check out the LazarusVisionGuide.pdf to see full screen images of the interfaces. Spoiler alert, it looks very similar to FreeVision/TurboVision. The major difference is how you program the forms and controls. LazarusVision provides a more modern
+Check out the LazarusVisionGuide.pdf to see full color screen images of the interfaces. The images below are not true view of how the interface looks like. Its not broken characters and BW. Spoiler alert, it looks very similar to FreeVision/TurboVision. The major difference is how you program the forms and controls. LazarusVision provides a more modern
 method of designing interface objects.
 
 I know some of you are against vibe coding but Claude has reached a point where the stuff he is delivering is better than anything i could 
