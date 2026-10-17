@@ -1,0 +1,194 @@
+object LfmForm: TLfmForm
+  Left = 3
+  Top = 1
+  Width = 70
+  Height = 22
+  Caption = '1 A form from LFMDEMO.LFM'
+  Position = poScreenCenter
+  KeyPreview = True
+  ShowHint = True
+  Menu = MainMenu1
+  ActiveControl = NameEdit
+  DesignTimePPI = 96
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  object NameLabel: TLabel
+    Left = 1
+    Top = 1
+    Caption = '&Name:'
+    FocusControl = NameEdit
+  end
+  object NameEdit: TEdit
+    Left = 9
+    Top = 1
+    Width = 30
+    Height = 1
+    Anchors = [akTop, akLeft, akRight]
+    Text = 'World'
+    Hint = 'Your name|Your name, for the Hello button'
+    OnChange = NameEditChange
+  end
+  object HelloButton: TButton
+    Left = 42
+    Top = 1
+    Width = 14
+    Height = 2
+    Anchors = [akTop, akRight]
+    Action = actHello
+    Default = True
+  end
+  object LoudCheck: TCheckBox
+    Left = 1
+    Top = 3
+    Caption = '&Loud'
+    Font.Color = clRed
+  end
+  object SizeGroup: TRadioGroup
+    Left = 1
+    Top = 5
+    Width = 20
+    Height = 5
+    Caption = '&Size'
+    ItemIndex = 2
+    Items.Strings = (
+      'Small'
+      'Medium'
+      'Large'
+    )
+    OnClick = SizeGroupClick
+  end
+  object FruitList: TListBox
+    Left = 23
+    Top = 5
+    Width = 16
+    Height = 5
+    ItemIndex = 1
+    Items.Strings = (
+      'Apple'
+      'Banana'
+      'Cherry'
+      'Grape'
+      'Lemon'
+      'Mango'
+    )
+  end
+  object CityCombo: TComboBox
+    Left = 42
+    Top = 5
+    Width = 16
+    Height = 1
+    Style = csDropDownList
+    ItemIndex = 1
+    Items.Strings = (
+      'Paris'
+      'Rome'
+      'Madrid'
+    )
+  end
+  object QtySpin: TSpinEdit
+    Left = 42
+    Top = 7
+    Width = 8
+    Height = 1
+    MinValue = 1
+    MaxValue = 99
+    Value = 12
+  end
+  object Pages: TPageControl
+    Left = 1
+    Top = 10
+    Width = 66
+    Height = 7
+    ActivePage = NotesSheet
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    object GridSheet: TTabSheet
+      Caption = '&Grid'
+      object Grid: TStringGrid
+        Left = 0
+        Top = 0
+        Width = 64
+        Height = 5
+        Align = alClient
+        ColCount = 3
+        RowCount = 4
+        FixedCols = 0
+        DefaultColWidth = 12
+        Options = [goFixedVertLine, goVertLine, goEditing]
+      end
+    end
+    object NotesSheet: TTabSheet
+      Caption = 'N&otes'
+      object Notes: TMemo
+        Left = 0
+        Top = 0
+        Width = 64
+        Height = 5
+        Align = alClient
+        ScrollBars = ssAutoVertical
+        Lines.Strings = (
+          'This memo, the page control and everything else'
+          'on this form come from LFMDEMO.LFM.'
+        )
+      end
+    end
+    object FilesSheet: TTabSheet
+      Caption = '&Files'
+      object Files: TListView
+        Left = 0
+        Top = 0
+        Width = 64
+        Height = 5
+        Align = alClient
+        GridLines = True
+        Columns = <
+          item
+            Caption = 'Name'
+            Width = 20
+          end
+          item
+            Alignment = taRightJustify
+            Caption = 'Size'
+            Width = 9
+          end>
+      end
+    end
+  end
+  object StatusBar1: TStatusBar
+    Panels = <
+      item
+        Text = '~F2~ Hello'
+        Width = 12
+      end
+      item
+        Text = 'Ready'
+      end>
+  end
+  object MainMenu1: TMainMenu
+    object FileItem: TMenuItem
+      Caption = '&File'
+      object HelloItem: TMenuItem
+        Action = actHello
+      end
+      object SepItem: TMenuItem
+        Caption = '-'
+      end
+      object QuitItem: TMenuItem
+        Caption = '&Quit'
+        ShortCut = 16465
+        OnClick = QuitItemClick
+      end
+    end
+  end
+  object ActionList1: TActionList
+    object actHello: TAction
+      Caption = '&Hello'
+      Hint = 'Say hello'
+      ShortCut = 113
+      OnExecute = actHelloExecute
+    end
+  end
+  object Timer1: TTimer
+    Interval = 200
+    OnTimer = Timer1Timer
+  end
+end

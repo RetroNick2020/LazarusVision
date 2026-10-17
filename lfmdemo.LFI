@@ -1,0 +1,195 @@
+{ lfmdemo.LFI - made by LFM2INC from lfmdemo.lfm }
+'object LfmForm: TLfmForm'#10 +
+'  Left = 3'#10 +
+'  Top = 1'#10 +
+'  Width = 70'#10 +
+'  Height = 22'#10 +
+'  Caption = ''1 A form from LFMDEMO.LFM'''#10 +
+'  Position = poScreenCenter'#10 +
+'  KeyPreview = True'#10 +
+'  ShowHint = True'#10 +
+'  Menu = MainMenu1'#10 +
+'  ActiveControl = NameEdit'#10 +
+'  DesignTimePPI = 96'#10 +
+'  OnCreate = FormCreate'#10 +
+'  OnKeyDown = FormKeyDown'#10 +
+'  object NameLabel: TLabel'#10 +
+'    Left = 1'#10 +
+'    Top = 1'#10 +
+'    Caption = ''&Name:'''#10 +
+'    FocusControl = NameEdit'#10 +
+'  end'#10 +
+'  object NameEdit: TEdit'#10 +
+'    Left = 9'#10 +
+'    Top = 1'#10 +
+'    Width = 30'#10 +
+'    Height = 1'#10 +
+'    Anchors = [akTop, akLeft, akRight]'#10 +
+'    Text = ''World'''#10 +
+'    Hint = ''Your name|Your name, for the Hello button'''#10 +
+'    OnChange = NameEditChange'#10 +
+'  end'#10 +
+'  object HelloButton: TButton'#10 +
+'    Left = 42'#10 +
+'    Top = 1'#10 +
+'    Width = 14'#10 +
+'    Height = 2'#10 +
+'    Anchors = [akTop, akRight]'#10 +
+'    Action = actHello'#10 +
+'    Default = True'#10 +
+'  end'#10 +
+'  object LoudCheck: TCheckBox'#10 +
+'    Left = 1'#10 +
+'    Top = 3'#10 +
+'    Caption = ''&Loud'''#10 +
+'    Font.Color = clRed'#10 +
+'  end'#10 +
+'  object SizeGroup: TRadioGroup'#10 +
+'    Left = 1'#10 +
+'    Top = 5'#10 +
+'    Width = 20'#10 +
+'    Height = 5'#10 +
+'    Caption = ''&Size'''#10 +
+'    ItemIndex = 2'#10 +
+'    Items.Strings = ('#10 +
+'      ''Small'''#10 +
+'      ''Medium'''#10 +
+'      ''Large'''#10 +
+'    )'#10 +
+'    OnClick = SizeGroupClick'#10 +
+'  end'#10 +
+'  object FruitList: TListBox'#10 +
+'    Left = 23'#10 +
+'    Top = 5'#10 +
+'    Width = 16'#10 +
+'    Height = 5'#10 +
+'    ItemIndex = 1'#10 +
+'    Items.Strings = ('#10 +
+'      ''Apple'''#10 +
+'      ''Banana'''#10 +
+'      ''Cherry'''#10 +
+'      ''Grape'''#10 +
+'      ''Lemon'''#10 +
+'      ''Mango'''#10 +
+'    )'#10 +
+'  end'#10 +
+'  object CityCombo: TComboBox'#10 +
+'    Left = 42'#10 +
+'    Top = 5'#10 +
+'    Width = 16'#10 +
+'    Height = 1'#10 +
+'    Style = csDropDownList'#10 +
+'    ItemIndex = 1'#10 +
+'    Items.Strings = ('#10 +
+'      ''Paris'''#10 +
+'      ''Rome'''#10 +
+'      ''Madrid'''#10 +
+'    )'#10 +
+'  end'#10 +
+'  object QtySpin: TSpinEdit'#10 +
+'    Left = 42'#10 +
+'    Top = 7'#10 +
+'    Width = 8'#10 +
+'    Height = 1'#10 +
+'    MinValue = 1'#10 +
+'    MaxValue = 99'#10 +
+'    Value = 12'#10 +
+'  end'#10 +
+'  object Pages: TPageControl'#10 +
+'    Left = 1'#10 +
+'    Top = 10'#10 +
+'    Width = 66'#10 +
+'    Height = 7'#10 +
+'    ActivePage = NotesSheet'#10 +
+'    Anchors = [akTop, akLeft, akRight, akBottom]'#10 +
+'    object GridSheet: TTabSheet'#10 +
+'      Caption = ''&Grid'''#10 +
+'      object Grid: TStringGrid'#10 +
+'        Left = 0'#10 +
+'        Top = 0'#10 +
+'        Width = 64'#10 +
+'        Height = 5'#10 +
+'        Align = alClient'#10 +
+'        ColCount = 3'#10 +
+'        RowCount = 4'#10 +
+'        FixedCols = 0'#10 +
+'        DefaultColWidth = 12'#10 +
+'        Options = [goFixedVertLine, goVertLine, goEditing]'#10 +
+'      end'#10 +
+'    end'#10 +
+'    object NotesSheet: TTabSheet'#10 +
+'      Caption = ''N&otes'''#10 +
+'      object Notes: TMemo'#10 +
+'        Left = 0'#10 +
+'        Top = 0'#10 +
+'        Width = 64'#10 +
+'        Height = 5'#10 +
+'        Align = alClient'#10 +
+'        ScrollBars = ssAutoVertical'#10 +
+'        Lines.Strings = ('#10 +
+'          ''This memo, the page control and everything else'''#10 +
+'          ''on this form come from LFMDEMO.LFM.'''#10 +
+'        )'#10 +
+'      end'#10 +
+'    end'#10 +
+'    object FilesSheet: TTabSheet'#10 +
+'      Caption = ''&Files'''#10 +
+'      object Files: TListView'#10 +
+'        Left = 0'#10 +
+'        Top = 0'#10 +
+'        Width = 64'#10 +
+'        Height = 5'#10 +
+'        Align = alClient'#10 +
+'        GridLines = True'#10 +
+'        Columns = <'#10 +
+'          item'#10 +
+'            Caption = ''Name'''#10 +
+'            Width = 20'#10 +
+'          end'#10 +
+'          item'#10 +
+'            Alignment = taRightJustify'#10 +
+'            Caption = ''Size'''#10 +
+'            Width = 9'#10 +
+'          end>'#10 +
+'      end'#10 +
+'    end'#10 +
+'  end'#10 +
+'  object StatusBar1: TStatusBar'#10 +
+'    Panels = <'#10 +
+'      item'#10 +
+'        Text = ''~F2~ Hello'''#10 +
+'        Width = 12'#10 +
+'      end'#10 +
+'      item'#10 +
+'        Text = ''Ready'''#10 +
+'      end>'#10 +
+'  end'#10 +
+'  object MainMenu1: TMainMenu'#10 +
+'    object FileItem: TMenuItem'#10 +
+'      Caption = ''&File'''#10 +
+'      object HelloItem: TMenuItem'#10 +
+'        Action = actHello'#10 +
+'      end'#10 +
+'      object SepItem: TMenuItem'#10 +
+'        Caption = ''-'''#10 +
+'      end'#10 +
+'      object QuitItem: TMenuItem'#10 +
+'        Caption = ''&Quit'''#10 +
+'        ShortCut = 16465'#10 +
+'        OnClick = QuitItemClick'#10 +
+'      end'#10 +
+'    end'#10 +
+'  end'#10 +
+'  object ActionList1: TActionList'#10 +
+'    object actHello: TAction'#10 +
+'      Caption = ''&Hello'''#10 +
+'      Hint = ''Say hello'''#10 +
+'      ShortCut = 113'#10 +
+'      OnExecute = actHelloExecute'#10 +
+'    end'#10 +
+'  end'#10 +
+'  object Timer1: TTimer'#10 +
+'    Interval = 200'#10 +
+'    OnTimer = Timer1Timer'#10 +
+'  end'#10 +
+'end'#10

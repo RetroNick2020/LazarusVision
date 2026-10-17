@@ -1,0 +1,30 @@
+{ aboutlfm.LFI - made by LFM2INC from aboutlfm.lfm }
+'onbject AboutForm: TAboutForm'#10 +
+'  Left = 0'#10 +
+'  Top = 0'#10 +
+'  Width = 46'#10 +
+'  Height = 9'#10 +
+'  BorderStyle = bsDialog'#10 +
+'  Caption = ''About Dialog'''#10 +
+'  Position = poScreenCenter'#10 +
+'  object InfoLabel: TLabel'#10 +
+'    Left = 2'#10 +
+'    Top = 1'#10 +
+'    Caption = ''1This dialog''''s .lfm is built into'''#10 +
+'  end'#10 +
+'  object InfoLabel2: TLabel'#10 +
+'    Left = 2'#10 +
+'    Top = 2'#10 +
+'    Caption = ''1the program (LFM2INC, RegisterFormText).'''#10 +
+'  end'#10 +
+'  object OkButton: TButton'#10 +
+'    Left = 16'#10 +
+'    Top = 4'#10 +
+'    Width = 12'#10 +
+'    Height = 2'#10 +
+'    Caption = ''OK'''#10 +
+'    Default = True'#10 +
+'    Cancel = True'#10 +
+'    ModalResult = mrOK'#10 +
+'  end'#10 +
+'end'#10
