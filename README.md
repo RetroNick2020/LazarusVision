@@ -1,12 +1,38 @@
-LazarusVision was created by accident. Vibe coding with Claude I simply asked him to create simple TUI modeled after Lazarus LCL. 
-Claude knocked this one out of the park. Proceeded to create most of the controls in one shot. When done I asked if we could create a 
-freepascal code editor for DOS and Claude delivered! And yes it's better than FreeVision! 
+# LazarusVision — Native DOS\Windows Support
 
-Check out the LazarusVisionGuide.pdf to see full color screen images of the interfaces. The images below are not true view of how the interface looks like. Its not broken characters and BW. Spoiler alert, it looks very similar to FreeVision/TurboVision. The major difference is how you program the forms and controls. LazarusVision provides a more modern
-method of designing interface objects.
+**Turbo Vision / Free Vision look and feel. Lazarus LCL programming style.**
 
-I know some of you are against vibe coding but Claude has reached a point where the stuff he is delivering is better than anything i could 
-accomplish on my own! Plus who writes software for DOS these days. This can no doubt be ported to Windows/Linux but that's not my thing. Fork it!
+LazarusVision is a Free Pascal text-mode user interface framework that combines the classic look and feel of Borland Turbo Vision and Free Pascal Free Vision with a modern, component-oriented programming model inspired by Lazarus LCL.
+
+It provides familiar concepts such as forms, visual controls, properties, events, and form resources while retaining the efficiency and keyboard-driven interface of traditional text-mode applications.
+
+## Now Supporting Native Windows
+
+Originally developed for 32-bit DOS using Free Pascal GO32v2, LazarusVision now supports native Windows Win32 applications using the same shared framework source code.
+
+The Windows portability update introduces:
+
+- Native Windows Console API rendering.
+- Windows keyboard and mouse support.
+- DOS-style colors and CP437 box-drawing characters.
+- Windows clipboard integration for memo and code editor controls.
+- Automatic console code-page configuration.
+- Larger Windows console dimensions.
+- Platform-specific mouse cursor handling.
+- Improved LVCode IDE compiler and program execution.
+- Conditional compilation to preserve DOS GO32v2 compatibility.
+
+## Supported Platforms
+
+- **DOS:** Free Pascal GO32v2 (32-bit)
+- **Windows:** Free Pascal Win32 (32-bit)
+- **Linux:** Planned
+
+## Development Philosophy
+
+LazarusVision aims to bring the convenience of Lazarus-style application development to classic text-mode interfaces, allowing developers to build applications using reusable visual controls, event-driven programming, and familiar form-based application structures.
+
+The goal is to preserve the simplicity and responsiveness of Turbo Vision and Free Vision while offering a programming experience closer to Lazarus LCL.
 
 
 # LazarusVision User Guide
