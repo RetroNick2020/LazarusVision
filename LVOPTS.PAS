@@ -375,6 +375,10 @@ begin
    {$IFDEF GO32V2}
    ext := '.exe';
    {$ENDIF}
+   {$IFDEF WINDOWS}
+   { An unspecified -T means the native Windows target; FPC emits .exe. }
+   ext := '.exe';
+   {$ENDIF}
    if (TargetOS = 'go32v2') or (TargetOS = 'msdos') or (TargetOS = 'win32') or
       (TargetOS = 'win64') or (TargetOS = 'os2') then ext := '.exe'
    else if TargetOS <> '' then

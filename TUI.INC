@@ -8,9 +8,14 @@
 {$S-}   { no stack checks }
 {$I-}   { I/O errors checked by hand }
 
-{ The DOS build (go32v2) talks to the hardware through the go32 unit. Any  }
-{ other target (a Linux build used for testing) gets an emulated 80x25     }
-{ text screen in memory, with input only from TUIPostKey / TUIPostMouse.   }
+{ Define TUIEMU explicitly (-dTUIEMU) for headless tests on any host. }
+{ Native Windows builds use TUIHW_WIN.INC; GO32v2 keeps BIOS backend. }
 {$IFNDEF GO32V2}
-  {$DEFINE TUIEMU}
+  {$IFDEF WINDOWS}
+    {$IFNDEF TUIEMU}
+      {$DEFINE TUIWIN}
+    {$ENDIF}
+  {$ELSE}
+    {$DEFINE TUIEMU}
+  {$ENDIF}
 {$ENDIF}

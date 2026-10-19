@@ -420,10 +420,12 @@ type
    TClipboard = class
    private
       FText: string;
+      function GetText: string;
+      procedure SetText(const Value: string);
    public
       function HasText: boolean;
    published
-      property AsText: string read FText write FText;
+      property AsText: string read GetText write SetText;
    end;
 
    TExceptionEvent = procedure(Sender: TObject; E: Exception) of object;
@@ -771,7 +773,15 @@ var
    TUITextRows    : integer = 0;      { 0 = keep the DOS mode; 25/28/43/50/60 }
    TUITextCols    : integer = 0;      { 0 = keep; 80 or 132 (VESA) }
    TUIBrightBack  : boolean = true;   { 16 background colours, no blinking }
-   TUIMouseCursor : boolean = true;   { draw the mouse cursor }
+   {$IFDEF TUIWIN}
+   {$IFDEF TUI_SOFTWARE_MOUSE_CURSOR}
+   TUIMouseCursor : boolean = true;   { optional Windows cell highlight }
+   {$ELSE}
+   TUIMouseCursor : boolean = false;  { Windows already draws an arrow pointer }
+   {$ENDIF}
+   {$ELSE}
+   TUIMouseCursor : boolean = true;   { DOS and emulator legacy default }
+   {$ENDIF}
    TUIInsertMode  : boolean = true;   { edit fields: insert (line cursor) }
    TUIDblClickMS  : longint = 500;    { two clicks within this: a double click }
 
@@ -1628,9 +1638,81 @@ procedure TMenuBarBase.Popup(X, Y: integer);
 begin
 end;
 
+{$IFDEF TUIWIN}
+const CF_UNICODETEXT_TUI = 13; GMEM_MOVEABLE_TUI = $0002;
+function TUIOpenClipboard(Owner: PtrUInt): LongBool; stdcall; external 'user32.dll' name 'OpenClipboard';
+function TUICloseClipboard: LongBool; stdcall; external 'user32.dll' name 'CloseClipboard';
+function TUIEmptyClipboard: LongBool; stdcall; external 'user32.dll' name 'EmptyClipboard';
+function TUIGetClipboardData(Format: LongWord): PtrUInt; stdcall; external 'user32.dll' name 'GetClipboardData';
+function TUISetClipboardData(Format: LongWord; Data: PtrUInt): PtrUInt; stdcall; external 'user32.dll' name 'SetClipboardData';
+function TUIIsClipboardFormatAvailable(Format: LongWord): LongBool; stdcall; external 'user32.dll' name 'IsClipboardFormatAvailable';
+function TUIGlobalAlloc(Flags: LongWord; Bytes: PtrUInt): PtrUInt; stdcall; external 'kernel32.dll' name 'GlobalAlloc';
+function TUIGlobalLock(Handle: PtrUInt): Pointer; stdcall; external 'kernel32.dll' name 'GlobalLock';
+function TUIGlobalUnlock(Handle: PtrUInt): LongBool; stdcall; external 'kernel32.dll' name 'GlobalUnlock';
+function TUIGlobalFree(Handle: PtrUInt): PtrUInt; stdcall; external 'kernel32.dll' name 'GlobalFree';
+{$ENDIF}
+
+function TClipboard.GetText: string;
+{$IFDEF TUIWIN}
+var H: PtrUInt; P: Pointer; W: WideString;
+{$ENDIF}
+begin
+   Result := FText;
+   {$IFDEF TUIWIN}
+   if not TUIIsClipboardFormatAvailable(CF_UNICODETEXT_TUI) then exit;
+   if not TUIOpenClipboard(0) then exit;
+   try
+      H := TUIGetClipboardData(CF_UNICODETEXT_TUI);
+      if H = 0 then exit;
+      P := TUIGlobalLock(H);
+      if P = nil then exit;
+      try
+         W := PWideChar(P);
+         Result := UTF8Encode(W);
+      finally
+         TUIGlobalUnlock(H);
+      end;
+   finally
+      TUICloseClipboard;
+   end;
+   {$ENDIF}
+end;
+
+procedure TClipboard.SetText(const Value: string);
+{$IFDEF TUIWIN}
+var W: WideString; H: PtrUInt; P: Pointer; Bytes: PtrUInt;
+{$ENDIF}
+begin
+   FText := Value;
+   {$IFDEF TUIWIN}
+   W := UTF8Decode(Value);
+   Bytes := (Length(W) + 1) * SizeOf(WideChar);
+   H := TUIGlobalAlloc(GMEM_MOVEABLE_TUI, Bytes);
+   if H = 0 then exit;
+   P := TUIGlobalLock(H);
+   if P = nil then begin TUIGlobalFree(H); exit; end;
+   FillChar(P^, Bytes, 0);
+   if Length(W) <> 0 then Move(W[1], P^, Length(W) * SizeOf(WideChar));
+   TUIGlobalUnlock(H);
+   if not TUIOpenClipboard(0) then begin TUIGlobalFree(H); exit; end;
+   try
+      if TUIEmptyClipboard then
+      begin
+         if TUISetClipboardData(CF_UNICODETEXT_TUI, H) <> 0 then H := 0;
+      end;
+   finally
+      TUICloseClipboard;
+   end;
+   if H <> 0 then TUIGlobalFree(H);
+   {$ENDIF}
+end;
+
 function TClipboard.HasText: boolean;
 begin
    Result := FText <> '';
+   {$IFDEF TUIWIN}
+   Result := TUIIsClipboardFormatAvailable(CF_UNICODETEXT_TUI);
+   {$ENDIF}
 end;
 
 procedure TControl.DblClick;

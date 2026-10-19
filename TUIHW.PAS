@@ -24,8 +24,13 @@ unit TUIHW;
 interface
 
 const
+   {$IFDEF TUIWIN}
+   MaxCols  = 240;
+   MaxRows  = 100;
+   {$ELSE}
    MaxCols  = 132;
    MaxRows  = 60;
+   {$ENDIF}
    MaxCells = MaxCols * MaxRows;
 
 type
@@ -43,6 +48,10 @@ var
 { start / end: detect the mode, save the DOS screen, restore it at the end }
 procedure HWInit;
 procedure HWDone;
+{$IFDEF TUIWIN}
+procedure HWExternalConsoleBegin;
+procedure HWExternalConsoleEnd;
+{$ENDIF}
 
 { change the number of text rows (25, 28, 43 or 50; VGA for 28/50). Call   }
 { before HWInit or after it (TUISCRN.ScrSetRows does both).                }
@@ -93,11 +102,15 @@ var
 
 implementation
 
-{$IFNDEF TUIEMU}
+{$IFDEF GO32V2}
 uses go32;
+{$ELSE}
+  {$IFDEF TUIWIN}
+uses SysUtils;
+  {$ENDIF}
 {$ENDIF}
 
-{$IFNDEF TUIEMU}
+{$IFDEF GO32V2}
 {=============================================================================}
 {  DOS (go32v2)                                                               }
 {=============================================================================}
@@ -468,6 +481,9 @@ begin
 end;
 
 {$ELSE}
+{$IFDEF TUIWIN}
+{$I TUIHW_WIN.INC}
+{$ELSE}
 {=============================================================================}
 {  Emulation (tests on other targets)                                         }
 {=============================================================================}
@@ -601,12 +617,13 @@ function HWEmuAttr(X, Y: integer): byte;
 begin
    Result := EmuScreen[Y * HWCols + X] shr 8;
 end;
-{$ENDIF}
+{$ENDIF} { TUIWIN / emulator }
+{$ENDIF} { GO32V2 }
 
 initialization
    HWCols := 80;
    HWRows := 25;
-{$IFNDEF TUIEMU}
+{$IFDEF GO32V2}
    PatchRtlMove;
 {$ELSE}
    MoveIsPatched := false;

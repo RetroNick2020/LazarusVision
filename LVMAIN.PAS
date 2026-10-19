@@ -654,8 +654,8 @@ begin
    end;
    t0 := HWTicks;
    try
-      code := ExecRedirected(Opts.CompilerPath, '@' + rsp + ' ' + arg, outf);
-      Application.ResumeScreen;
+      { ExecRedirected waits for the compiler to terminate and captures stderr. }
+      code := ExecCompiler(Opts.CompilerPath, rsp, arg, outf);
    finally
       HideBusy;
    end;
@@ -720,7 +720,10 @@ begin
    if not DoCompile(bkMake) then exit;
    if not FileExists(LastExe) then
    begin
-      MessageDlg('Run', 'No program to run:' + LineEnding + LastExe, mtError, [mbOK], 0);
+      MessageDlg('Run', 'Compilation completed, but the executable was not found:' +
+         LineEnding + LastExe + LineEnding + LineEnding +
+         'Check Options | Compiler: Target OS, Executable output directory ' +
+         '(-FE), and extra output-name options (-o).', mtError, [mbOK], 0);
       exit;
    end;
    code := RunOnUserScreen(LastExe, Opts.RunParameters);

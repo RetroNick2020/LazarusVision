@@ -116,8 +116,8 @@ begin
   actFolder := Act('&Folder...', 'Pick a folder (TSelectDirectoryDialog)', 0, @FolderExecute);
   actClose := Act('&Close', 'Close the notepad', 0, @CloseExecute);
   actCut := Act('Cu&t', 'Cut|Cut the selection', ShortCut(Ord('X'), [ssCtrl]), @CutExecute);
-  actCopy := Act('&Copy', 'Copy|Copy the selection', ShortCut(Ord('C'), [ssCtrl]), @CopyExecute);
-  actPaste := Act('&Paste', 'Paste|Paste the clipboard', ShortCut(Ord('V'), [ssCtrl]), @PasteExecute);
+  actCopy := Act('&Copy', 'Copy to Windows clipboard (Ctrl+C)|Copy the selection', ShortCut(Ord('C'), [ssCtrl]), @CopyExecute);
+  actPaste := Act('&Paste', 'Paste from Windows clipboard (Ctrl+V)|Paste the clipboard', ShortCut(Ord('V'), [ssCtrl]), @PasteExecute);
   actSelectAll := Act('Select &all', 'Select all the text', ShortCut(Ord('A'), [ssCtrl]), @SelectAllExecute);
   actFind := Act('&Find...', 'Find|Find a text', ShortCut(Ord('F'), [ssCtrl]), @FindExecute);
   actFindNext := Act('Find &next', 'Find it again', ShortCut(VK_F3, []), @FindNextExecute);

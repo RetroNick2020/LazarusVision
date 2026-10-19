@@ -9,6 +9,7 @@
 unit LVExec;
 
 {$mode objfpc}{$H+}
+{$I TUI.INC}  { Define TUIWIN consistently with TUIHW/TUICTRL }
 
 interface
 
@@ -24,6 +25,7 @@ var
 { run Prog Args with the output going to OutFile; the exit code (-1: it }
 { could not be started)                                                }
 function ExecRedirected(const Prog, Args, OutFile: string): integer;
+function ExecCompiler(const Prog, ResponseFile, SourceFile, OutFile: string): integer;
 
 { run the program on the user screen; afterwards (LVWaitAfterRun) "Press any }
 { key"; the screen is kept for ShowUserScreen. The exit code                }
@@ -33,6 +35,65 @@ function RunOnUserScreen(const Exe, Params: string): integer;
 procedure ShowUserScreen;
 
 implementation
+
+{$IFDEF TUIWIN}
+uses Process;
+{$ENDIF}
+
+{ Run FPC as a direct child and wait for its actual exit. Avoid cmd.exe /C,
+  which can misinterpret spaces, metacharacters and executable quoting. }
+function ExecCompiler(const Prog, ResponseFile, SourceFile, OutFile: string): integer;
+{$IFDEF TUIWIN}
+var P: TProcess;
+    F: TFileStream;
+    Buf: array[0..8191] of byte;
+    N: longint;
+begin
+   Result := -1;
+   DeleteFile(OutFile);
+   P := TProcess.Create(nil);
+   try
+      P.Executable := Prog;
+      P.Parameters.Add('@' + ResponseFile);
+      P.Parameters.Add(SourceFile);
+      P.Options := [poUsePipes, poStderrToOutPut, poNoConsole];
+      F := TFileStream.Create(OutFile, fmCreate);
+      try
+         try
+            P.Execute;
+            repeat
+               N := P.Output.NumBytesAvailable;
+               if N > SizeOf(Buf) then N := SizeOf(Buf);
+               if N > 0 then
+               begin
+                  N := P.Output.Read(Buf, N);
+                  if N > 0 then F.WriteBuffer(Buf, N);
+               end
+               else if P.Running then Sleep(10);
+            until (not P.Running) and (P.Output.NumBytesAvailable = 0);
+            P.WaitOnExit;
+            Result := P.ExitStatus;
+         except
+            on E: Exception do
+            begin
+               Result := -1;
+               if P.Running then P.Terminate(1);
+               { Leave a meaningful diagnostic for LVCode's message pane. }
+               F.WriteBuffer(PChar(E.Message)^, Length(E.Message));
+            end;
+         end;
+      finally
+         F.Free;
+      end;
+   finally
+      P.Free;
+   end;
+end;
+{$ELSE}
+begin
+   Result := ExecRedirected(Prog, '@' + ResponseFile + ' ' + SourceFile, OutFile);
+end;
+{$ENDIF}
 
 function ExecRedirected(const Prog, Args, OutFile: string): integer;
 var cmd: string;
@@ -44,8 +105,14 @@ begin
       if cmd = '' then cmd := 'COMMAND.COM';
       Result := ExecuteProcess(cmd, '/C ' + Prog + ' ' + Args + ' > ' + OutFile);
       {$ELSE}
+        {$IFDEF WINDOWS}
+      cmd := GetEnvironmentVariable('COMSPEC');
+      if cmd = '' then cmd := 'cmd.exe';
+      Result := ExecuteProcess(cmd, '/C ' + Prog + ' ' + Args + ' > ' + OutFile + ' 2>&1');
+        {$ELSE}
       cmd := Prog + ' ' + Args + ' > ' + OutFile + ' 2>&1';
       Result := ExecuteProcess('/bin/sh', ['-c', cmd]);
+        {$ENDIF}
       {$ENDIF}
    except
       on E: Exception do Result := -1;
@@ -115,8 +182,33 @@ begin
          HWReadKey;
       end;
       {$ELSE}
+        {$IFDEF TUIWIN}
+      { Run as a child of LVCode, not through cmd.exe. ExecuteProcess waits
+        for the program to exit, preserving interactive stdin/stdout. }
+      HWExternalConsoleBegin;
+      try
+         try
+            Result := ExecuteProcess(Exe, Params);
+         except
+            on E: Exception do
+            begin
+               WriteLn('Cannot run ', Exe, ': ', E.Message);
+               Result := -1;
+            end;
+         end;
+         if LVWaitAfterRun then
+         begin
+            WriteLn;
+            Write('Press ENTER to return to LVCode...');
+            ReadLn;
+         end;
+      finally
+         HWExternalConsoleEnd;
+      end;
+        {$ELSE}
       Result := ExecRedirected(Exe, Params, 'LVRUN.OUT');
       OutputToScreen('LVRUN.OUT');
+        {$ENDIF}
       {$ENDIF}
       SaveUserScreen;
    finally
