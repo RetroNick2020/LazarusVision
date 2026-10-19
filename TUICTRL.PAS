@@ -780,7 +780,15 @@ var
    TUIMouseCursor : boolean = false;  { Windows already draws an arrow pointer }
    {$ENDIF}
    {$ELSE}
+   {$IFDEF TUILINUX}
+   {$IFDEF TUI_SOFTWARE_MOUSE_CURSOR}
+   TUIMouseCursor : boolean = true;
+   {$ELSE}
+   TUIMouseCursor : boolean = false;
+   {$ENDIF}
+   {$ELSE}
    TUIMouseCursor : boolean = true;   { DOS and emulator legacy default }
+   {$ENDIF}
    {$ENDIF}
    TUIInsertMode  : boolean = true;   { edit fields: insert (line cursor) }
    TUIDblClickMS  : longint = 500;    { two clicks within this: a double click }

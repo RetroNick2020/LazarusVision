@@ -206,8 +206,29 @@ begin
          HWExternalConsoleEnd;
       end;
         {$ELSE}
+          {$IFDEF TUILINUX}
+      HWExternalConsoleBegin;
+      try
+         try
+            Result := ExecuteProcess(Exe, Params);
+         except
+            on E: Exception do begin
+               WriteLn('Cannot run ', Exe, ': ', E.Message);
+               Result := -1;
+            end;
+         end;
+         if LVWaitAfterRun then begin
+            WriteLn;
+            Write('Press ENTER to return to LVCode...');
+            ReadLn;
+         end;
+      finally
+         HWExternalConsoleEnd;
+      end;
+          {$ELSE}
       Result := ExecRedirected(Exe, Params, 'LVRUN.OUT');
       OutputToScreen('LVRUN.OUT');
+          {$ENDIF}
         {$ENDIF}
       {$ENDIF}
       SaveUserScreen;

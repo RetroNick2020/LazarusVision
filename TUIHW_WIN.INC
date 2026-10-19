@@ -55,6 +55,12 @@ var
   WinShift: Byte;
   WinQueue: array[0..255] of Word;
   WinQHead, WinQTail: Integer;
+  { Cache only successful native cursor updates.  Console children can alter
+    cursor state, so invalidate whenever we hand the console away/back. }
+  WinCursorInfoValid, WinCursorPosValid: Boolean;
+  WinLastCursorVisible: Boolean;
+  WinLastCursorSize: LongWord;
+  WinLastCursorX, WinLastCursorY: Integer;
 
 function WinCoord(X, Y: Integer): TWinCoord;
 begin
@@ -152,7 +158,9 @@ begin
   { Disable Quick Edit; it freezes input polling when text is selected. }
   WinSetConsoleMode(WinIn, (WinInMode or $0080 or $0010 or $0008) and not ($0040 or $0002 or $0004));
   WinMouseX := 0; WinMouseY := 0; WinButtons := 0; WinWheel := 0;
-  WinQHead := 0; WinQTail := 0; WinStarted := true;
+  WinQHead := 0; WinQTail := 0;
+  WinCursorInfoValid := false; WinCursorPosValid := false;
+  WinStarted := true;
   HWMouseInit;
 end;
 
@@ -163,6 +171,7 @@ begin
   WinSetConsoleMode(WinIn, WinInMode);
   WinSetConsoleOutputCP(WinOldCP);
   WinQHead := 0; WinQTail := 0;
+  WinCursorInfoValid := false; WinCursorPosValid := false;
 end;
 
 procedure HWExternalConsoleEnd;
@@ -173,6 +182,7 @@ begin
   WinSetConsoleOutputCP(437);
   WinQHead := 0; WinQTail := 0;
   WinButtons := 0; WinWheel := 0;
+  WinCursorInfoValid := false; WinCursorPosValid := false;
 end;
 
 procedure HWDone;
@@ -263,13 +273,36 @@ begin
 end;
 
 procedure HWSetCursor(X, Y: Integer; Shape: TCursorShape);
-var C: TWinCursorInfo;
+var
+  C: TWinCursorInfo;
+  PosX, PosY: Integer;
 begin
   if not WinStarted then Exit;
   C.Visible := Shape <> csHidden;
   if Shape = csBlock then C.Size := 100 else C.Size := 15;
-  WinSetCursorInfo(WinOut, C);
-  if Shape <> csHidden then WinSetCursorPos(WinOut, WinCoord(X+WinOriginX, Y+WinOriginY));
+
+  { An idle ScrFlush calls HWSetCursor repeatedly.  Reapplying cursor info
+    every iteration can visibly restart the host cursor blink cycle. }
+  if (not WinCursorInfoValid) or
+     (WinLastCursorVisible <> C.Visible) or
+     (WinLastCursorSize <> C.Size) then
+    if WinSetCursorInfo(WinOut, C) then begin
+      WinLastCursorVisible := C.Visible;
+      WinLastCursorSize := C.Size;
+      WinCursorInfoValid := true;
+    end;
+
+  if Shape <> csHidden then begin
+    PosX := X + WinOriginX;
+    PosY := Y + WinOriginY;
+    if (not WinCursorPosValid) or
+       (PosX <> WinLastCursorX) or (PosY <> WinLastCursorY) then
+      if WinSetCursorPos(WinOut, WinCoord(PosX, PosY)) then begin
+        WinLastCursorX := PosX;
+        WinLastCursorY := PosY;
+        WinCursorPosValid := true;
+      end;
+  end;
 end;
 
 function HWKeyPressed: Boolean;

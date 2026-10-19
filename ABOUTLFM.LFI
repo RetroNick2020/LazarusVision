@@ -1,21 +1,21 @@
-{ aboutlfm.LFI - made by LFM2INC from aboutlfm.lfm }
-'onbject AboutForm: TAboutForm'#10 +
+{ ABOUTLFM.LFI - made by LFM2INC from ABOUTLFM.LFM }
+'object AboutForm: TAboutForm'#10 +
 '  Left = 0'#10 +
 '  Top = 0'#10 +
 '  Width = 46'#10 +
 '  Height = 9'#10 +
 '  BorderStyle = bsDialog'#10 +
-'  Caption = ''About Dialog'''#10 +
+'  Caption = ''About'''#10 +
 '  Position = poScreenCenter'#10 +
 '  object InfoLabel: TLabel'#10 +
 '    Left = 2'#10 +
 '    Top = 1'#10 +
-'    Caption = ''1This dialog''''s .lfm is built into'''#10 +
+'    Caption = ''This dialog''''s .lfm is built into'''#10 +
 '  end'#10 +
 '  object InfoLabel2: TLabel'#10 +
 '    Left = 2'#10 +
 '    Top = 2'#10 +
-'    Caption = ''1the program (LFM2INC, RegisterFormText).'''#10 +
+'    Caption = ''the program (LFM2INC, RegisterFormText).'''#10 +
 '  end'#10 +
 '  object OkButton: TButton'#10 +
 '    Left = 16'#10 +

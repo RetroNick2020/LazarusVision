@@ -1,10 +1,10 @@
-{ lfmdemo.LFI - made by LFM2INC from lfmdemo.lfm }
+{ lfmdemo.LFI - made by LFM2INC from LFMDEMO.LFM }
 'object LfmForm: TLfmForm'#10 +
 '  Left = 3'#10 +
 '  Top = 1'#10 +
 '  Width = 70'#10 +
 '  Height = 22'#10 +
-'  Caption = ''1 A form from LFMDEMO.LFM'''#10 +
+'  Caption = ''A form from LFMDEMO.LFM'''#10 +
 '  Position = poScreenCenter'#10 +
 '  KeyPreview = True'#10 +
 '  ShowHint = True'#10 +

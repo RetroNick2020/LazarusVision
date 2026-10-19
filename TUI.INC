@@ -16,6 +16,12 @@
       {$DEFINE TUIWIN}
     {$ENDIF}
   {$ELSE}
-    {$DEFINE TUIEMU}
+    {$IFDEF LINUX}
+      {$IFNDEF TUIEMU}
+        {$DEFINE TUILINUX}
+      {$ENDIF}
+    {$ELSE}
+      {$DEFINE TUIEMU}
+    {$ENDIF}
   {$ENDIF}
 {$ENDIF}

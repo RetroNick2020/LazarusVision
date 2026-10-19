@@ -3,7 +3,7 @@ object LfmForm: TLfmForm
   Top = 1
   Width = 70
   Height = 22
-  Caption = '1 A form from LFMDEMO.LFM'
+  Caption = 'A form from LFMDEMO.LFM'
   Position = poScreenCenter
   KeyPreview = True
   ShowHint = True

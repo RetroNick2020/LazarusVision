@@ -28,8 +28,13 @@ const
    MaxCols  = 240;
    MaxRows  = 100;
    {$ELSE}
+   {$IFDEF TUILINUX}
+   MaxCols  = 240;
+   MaxRows  = 100;
+   {$ELSE}
    MaxCols  = 132;
    MaxRows  = 60;
+   {$ENDIF}
    {$ENDIF}
    MaxCells = MaxCols * MaxRows;
 
@@ -49,6 +54,12 @@ var
 procedure HWInit;
 procedure HWDone;
 {$IFDEF TUIWIN}
+  {$DEFINE TUI_EXTERNAL_CONSOLE}
+{$ENDIF}
+{$IFDEF TUILINUX}
+  {$DEFINE TUI_EXTERNAL_CONSOLE}
+{$ENDIF}
+{$IFDEF TUI_EXTERNAL_CONSOLE}
 procedure HWExternalConsoleBegin;
 procedure HWExternalConsoleEnd;
 {$ENDIF}
@@ -107,6 +118,9 @@ uses go32;
 {$ELSE}
   {$IFDEF TUIWIN}
 uses SysUtils;
+  {$ENDIF}
+  {$IFDEF TUILINUX}
+uses SysUtils, BaseUnix, Unix, Process;
   {$ENDIF}
 {$ENDIF}
 
@@ -484,6 +498,9 @@ end;
 {$IFDEF TUIWIN}
 {$I TUIHW_WIN.INC}
 {$ELSE}
+{$IFDEF TUILINUX}
+{$I TUIHW_LINUX.INC}
+{$ELSE}
 {=============================================================================}
 {  Emulation (tests on other targets)                                         }
 {=============================================================================}
@@ -617,7 +634,8 @@ function HWEmuAttr(X, Y: integer): byte;
 begin
    Result := EmuScreen[Y * HWCols + X] shr 8;
 end;
-{$ENDIF} { TUIWIN / emulator }
+{$ENDIF} { TUILINUX / emulator }
+{$ENDIF} { TUIWIN / others }
 {$ENDIF} { GO32V2 }
 
 initialization
