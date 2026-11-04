@@ -6,7 +6,8 @@ LazarusVision is a Free Pascal text-mode user interface framework that combines 
 
 It provides familiar concepts such as forms, visual controls, properties, events, and form resources while retaining the efficiency and keyboard-driven interface of traditional text-mode applications.
 
-You can see a project that has already been created with, makes use of most of the controls.
+You can see a project that has already been created with it, makes use of most of the controls.
+
 https://retronick2020.itch.io/qbvision-quickbasic-32-bit-dos-compiler
 
 ## Now Supporting Native Windows
